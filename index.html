@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیگنال تحلیلگران برتر | مینی‌اپ تلگرام</title>
+   <link rel="stylesheet" href="/static/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="/static/https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #6366f1;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --vip-gold: linear-gradient(135deg, #fde68a, #f59e0b);
+            --glass: rgba(255, 255, 255, 0.08);
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        body {
+           background: url('/static/https://images.unsplash.com/photo-1620336655052-b57986f5a26a?q=80&w=2070') center/cover no-repeat;
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* هدر */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--glass);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+            color: var(--warning);
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(to right, #f59e0b, #ec4899);
+            background-clip: text;
+-webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .user-panel {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-status {
+            background: var(--vip-gold);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .user-credit {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* تب‌های ناوبری */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.7), rgba(139, 92, 246, 0.7));
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .tab i {
+            margin-left: 8px;
+        }
+        
+        /* کارت‌های سیگنال */
+        .signals-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .signal-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .signal-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            z-index: -1;
+            border-radius: 20px;
+        }
+        
+        .signal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        
+        .signal-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .signal-type {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            backdrop-filter: blur(5px);
+        }
+        
+        .signal-type.free {
+            background: rgba(99, 102, 241, 0.3);
+        }
+        
+        .signal-type.vip {
+            background: var(--vip-gold);
+            color: var(--primary);
+        }
+        
+        .signal-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        
+        .signal-time {
+            color: var(--text-secondary);
+            font-size: 14px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .signal-content {
+            padding: 20px;
+        }
+        
+        .signal-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+        }
+        
+        .signal-row:last-child {
+            border-bottom: none;
+        }
+        
+        .signal-label {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .signal-value {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .signal-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+        }
+        
+        .status-active {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+        
+        .status-hit {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+        
+        .status-closed {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+        
+        .signal-actions {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .action-btn.primary {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(139, 92, 246, 0.8));
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .action-btn.primary:hover {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.8), rgba(124, 58, 237, 0.8));
+        }
+        
+        /* بخش آماری */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            z-index: -1;
+            border-radius: 20px;
+        }
+        
+        .stat-title {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .stat-trend {
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .trend-up {
+            color: var(--success);
+        }
+        
+        .trend-down {
+            color: var(--danger);
+        }
+        
+        /* پنل کاربری */
+        .user-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .user-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            z-index: -1;
+            border-radius: 20px;
+        }
+        
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .user-id {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .user-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .detail-card {
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .detail-title {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        /* بخش دعوت */
+        .referral-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .referral-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            z-index: -1;
+            border-radius: 20px;
+        }
+        
+        .referral-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .referral-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .referral-desc {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .referral-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .referral-stat {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+            padding: 15px;
+            border-radius: 12px;
+            min-width: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--warning);
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .referral-box {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            min-width: 300px;
+            flex: 1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .referral-code {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .copy-btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(139, 92, 246, 0.8));
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .copy-btn:hover {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.8), rgba(124, 58, 237, 0.8));
+        }
+        
+        /* پشتیبانی */
+        .support-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .support-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            z-index: -1;
+            border-radius: 20px;
+        }
+        
+        .support-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .support-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .support-card {
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .support-card:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateY(-5px);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+        }
+        
+        .support-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+        
+        .support-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .support-card-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* موج شیشه‌ای */
+        .glass-wave {
+            position: fixed;
+            bottom: -50px;
+            left: -50px;
+            width: 200%;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 50% 50% 0 0;
+            transform: rotate(5deg);
+            z-index: -2;
+            animation: wave-animation 8s infinite linear;
+        }
+        
+        @keyframes wave-animation {
+            0% { transform: rotate(5deg) translateX(0); }
+            50% { transform: rotate(5deg) translateX(-100px); }
+            100% { transform: rotate(5deg) translateX(0); }
+        }
+        
+        /* رسپانسیو */
+        @media (max-width: 768px) {
+            .signals-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .app-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .user-panel {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .referral-container {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                padding: 10px 5px;
+            }
+            
+            .tab {
+                min-width: 120px;
+            }
+        }
+        
+        /* استایل‌های جدید برای تعاملات */
+        .payment-option {
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .payment-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .payment-option.selected {
+            background: rgba(99, 102, 241, 0.3);
+            border: 2px solid var(--accent);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 24px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(34, 197, 94, 0.9);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .notification.error {
+            background: rgba(239, 68, 68, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="glass-wave"></div>
+    <div id="notification" class="notification"></div>
+    
+    <div class="container">
+        <!-- هدر اپلیکیشن -->
+        <header class="app-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="logo-text">سیگنال تحلیلگران برتر</div>
+            </div>
+            
+            <div class="user-panel">
+                <div class="user-status">
+                    <i class="fas fa-crown"></i>
+                    <span id="userStatus">اشتراک VIP</span>
+                </div>
+                <div class="user-credit">
+                    <i class="fas fa-wallet"></i>
+                    <span id="creditDays">اعتبار: ۳۲ روز</span>
+                </div>
+            </div>
+        </header>
+        
+        <!-- تب‌های ناوبری -->
+        <div class="tabs">
+            <div class="tab active" data-tab="signals">
+                <i class="fas fa-bolt"></i>
+                سیگنال‌های فعال
+            </div>
+            <div class="tab" data-tab="history">
+                <i class="fas fa-history"></i>
+                تاریخچه سیگنال‌ها
+            </div>
+            <div class="tab" data-tab="vip">
+                <i class="fas fa-crown"></i>
+                ارتقاء به VIP
+            </div>
+            <div class="tab" data-tab="referral">
+                <i class="fas fa-user-friends"></i>
+                دعوت دوستان
+            </div>
+            <div class="tab" data-tab="support">
+                <i class="fas fa-headset"></i>
+                پشتیبانی
+            </div>
+        </div>
+        
+        <!-- محتوای سیگنال‌ها -->
+        <div id="signalsContent" class="tab-content active">
+            <!-- بخش آماری -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-title">سیگنال‌های فعال</div>
+                    <div class="stat-value" id="activeSignalsCount">۸</div>
+                    <div class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="newSignalsCount">۳</span> مورد جدید
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">نرخ موفقیت</div>
+                    <div class="stat-value" id="successRate">۸۶%</div>
+                    <div class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="successRateChange">۴%</span> افزایش
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">میانگین سود</div>
+                    <div class="stat-value" id="avgProfit">+۳.۲%</div>
+                    <div class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="profitChange">۰.۸%</span> افزایش
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">کاربران VIP</div>
+                    <div class="stat-value" id="vipUsersCount">۲۴۳</div>
+                    <div class="stat-trend trend-up">
+                        <i class="fas fa-user-plus"></i>
+                        <span id="newVipCount">۱۲</span> عضو جدید
+                    </div>
+                </div>
+            </div>
+            
+            <!-- سیگنال‌ها -->
+            <h2 style="margin-bottom: 20px; font-size: 24px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">سیگنال‌های فعال امروز</h2>
+            <div class="signals-container" id="signalsContainer">
+                <!-- سیگنال‌ها به صورت دینامیکی توسط جاوااسکریپت پر می‌شوند -->
+            </div>
+            
+            <!-- پنل کاربری -->
+            <div class="user-container">
+                <div class="user-header">
+                    <div class="user-avatar" id="userAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">محمد رضایی</div>
+                        <div class="user-id" id="userId">شناسه کاربری: HAM-2458</div>
+                    </div>
+                </div>
+                
+                <div class="user-details">
+                    <div class="detail-card">
+                        <div class="detail-title">اشتراک فعلی</div>
+                        <div class="detail-value" id="userSubscription">VIP Pro</div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-title">اعتبار باقیمانده</div>
+                        <div class="detail-value" id="remainingDays">۳۲ روز</div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-title">سیگنال‌های فعال</div>
+                        <div class="detail-value" id="userActiveSignals">۵ سیگنال</div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-title">سود ماه جاری</div>
+                        <div class="detail-value" id="monthlyProfit" style="color: var(--success);">+۱۴.۷%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- محتوای ارتقاء به VIP -->
+        <div id="vipContent" class="tab-content">
+            <div class="referral-container">
+                <div class="referral-info">
+                    <div class="referral-title">ارتقاء به اشتراک VIP</div>
+                    <div class="referral-desc">
+                        با ارتقاء به اشتراک VIP، از مزایای زیر بهره‌مند شوید:
+                        <ul style="margin-top: 10px; padding-right: 20px;">
+                            <li>دسترسی به سیگنال‌های VIP با دقت بالا</li>
+                            <li>تحلیل‌های تخصصی روزانه</li>
+                            <li>پشتیبانی اختصاصی VIP</li>
+                            <li>گزارشات ویژه بازار</li>
+                            <li>هشدارهای لحظه‌ای</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="referral-stats">
+                        <div class="referral-stat">
+                            <div class="stat-number">۵۰$</div>
+                            <div class="stat-label">قیمت اشتراک</div>
+                        </div>
+                        
+                        <div class="referral-stat">
+                            <div class="stat-number">۳۰</div>
+                            <div class="stat-label">روز اعتبار</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="referral-box">
+                    <div class="referral-title">روش‌های پرداخت</div>
+                    <div class="payment-options">
+                        <div class="payment-option" data-method="card">
+                            <i class="fas fa-credit-card"></i>
+                            پرداخت کارتی
+                        </div>
+                        <div class="payment-option" data-method="tron">
+                            <i class="fab fa-bitcoin"></i>
+                            پرداخت با TRON
+                        </div>
+                    </div>
+                    <button id="payButton" class="copy-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        پرداخت
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- محتوای دعوت دوستان -->
+        <div id="referralContent" class="tab-content">
+            <div class="referral-container">
+                <div class="referral-info">
+                    <div class="referral-title">دعوت دوستان و دریافت پاداش</div>
+                    <div class="referral-desc">
+                        با دعوت دوستان خود به سرویس VIP ما، از مزایای زیر بهره‌مند شوید:
+                        <ul style="margin-top: 10px; padding-right: 20px;">
+                            <li>۲۰% اعتبار رایگان برای هر دعوت موفق</li>
+                            <li>۱۰% تخفیف برای دوستان شما در اولین خرید</li>
+                            <li>دسترسی به گزارشات ویژه با ۵ دعوت موفق</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="referral-stats">
+                        <div class="referral-stat">
+                            <div class="stat-number" id="inviteCount">۱۲</div>
+                            <div class="stat-label">دعوت موفق</div>
+                        </div>
+                        
+                        <div class="referral-stat">
+                            <div class="stat-number" id="freeDays">۶۴</div>
+                            <div class="stat-label">روز اعتبار رایگان</div>
+                        </div>
+                        
+                        <div class="referral-stat">
+                            <div class="stat-number" id="specialReports">۳</div>
+                            <div class="stat-label">گزارش ویژه</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="referral-box">
+                    <div class="referral-title">کد دعوت شما</div>
+                    <div class="referral-code" id="referralCode">HAM-VIP-2458</div>
+                    <button id="copyReferralBtn" class="copy-btn">
+                        <i class="fas fa-copy"></i>
+                        کپی لینک دعوت
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- محتوای پشتیبانی -->
+        <div id="supportContent" class="tab-content">
+            <div class="support-container">
+                <div class="support-title">پشتیبانی فنی</div>
+                
+                <div class="support-options">
+                    <div class="support-card" data-type="chat">
+                        <div class="support-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="support-card-title">گفتگوی مستقیم</div>
+                        <div class="support-card-desc">
+                            با تیم پشتیبانی ما به صورت زنده گفتگو کنید
+                        </div>
+                    </div>
+                    
+                    <div class="support-card" data-type="ticket">
+                        <div class="support-icon">
+                            <i class="fas fa-ticket"></i>
+                        </div>
+                        <div class="support-card-title">تیکت پشتیبانی</div>
+                        <div class="support-card-desc">
+                            برای مسائل فنی و پاسخ دقیق‌تر
+                        </div>
+                    </div>
+                    
+                    <div class="support-card" data-type="channel">
+                        <div class="support-icon">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div class="support-card-title">کانال تلگرام</div>
+                        <div class="support-card-desc">
+                            عضویت در کانال اطلاع‌رسانی
+                        </div>
+                    </div>
+                    
+                    <div class="support-card" data-type="guide">
+                        <div class="support-icon">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <div class="support-card-title">راهنمای استفاده</div>
+                        <div class="support-card-desc">
+                            آموزش کامل استفاده از سرویس
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ticket-form" id="ticketForm" style="display: none; margin-top: 20px;">
+                    <textarea id="ticketMessage" placeholder="پیام خود را بنویسید..." style="width: 100%; height: 150px; padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; margin-bottom: 15px;"></textarea>
+                    <button id="submitTicketBtn" class="action-btn primary" style="width: 100%; padding: 15px;">
+                        <i class="fas fa-paper-plane"></i>
+                        ارسال تیکت
+                    </button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button id="contactSupportBtn" class="action-btn primary" style="padding: 15px 30px; font-size: 16px;">
+                        <i class="fas fa-headset"></i>
+                        ارتباط با پشتیبانی
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- محتوای تاریخچه سیگنال‌ها -->
+        <div id="historyContent" class="tab-content">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                در حال بارگذاری تاریخچه سیگنال‌ها...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // داده‌های نمونه برای نمایش در رابط کاربری
+        const userData = {
+            name: "محمد رضایی",
+            userId: "HAM-2458",
+            status: "vip",
+            subscriptionType: "VIP Pro",
+            subscriptionDays: 32,
+            activeSignals: 5,
+            monthlyProfit: "+14.7%",
+            inviteCount: 12,
+            freeDays: 64,
+            specialReports: 3,
+            referralCode: "HAM-VIP-2458"
+        };
+
+        const signalsData = [
+            {
+                id: 1,
+                symbol: "BTC/USDT",
+                type: "vip",
+                time: "۱۴:۲۰ امروز",
+                direction: "buy",
+                entry: "61,200",
+                stopLoss: "59,800",
+                targets: ["62,500", "64,000", "67,000"],
+                status: "active",
+                statusText: "در جریان"
+            },
+            {
+                id: 2,
+                symbol: "ETH/USDT",
+                type: "free",
+                time: "۱۱:۴۵ امروز",
+                direction: "buy",
+                entry: "3,420",
+                stopLoss: "3,320",
+                targets: ["3,510", "3,620", "3,750"],
+                status: "hit",
+                statusText: "تارگت اول زده شد"
+            },
+            {
+                id: 3,
+                symbol: "SOL/USDT",
+                type: "vip",
+                time: "دیروز",
+                direction: "buy",
+                entry: "152.50",
+                stopLoss: "148.00",
+                targets: ["156.80", "160.50", "165.00"],
+                status: "closed",
+                statusText: "تارگت سوم زده شد (+۷.۲%)"
+            }
+        ];
+
+        const statsData = {
+            activeSignals: 8,
+            newSignals: 3,
+            successRate: 86,
+            successRateChange: 4,
+            avgProfit: 3.2,
+            profitChange: 0.8,
+            vipUsers: 243,
+            newVip: 12
+        };
+
+        // شیء تلگرام
+        const tg = window.Telegram.WebApp;
+
+        // تابع برای نمایش نوتیفیکیشن
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification' + (isError ? ' error' : '');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // تابع برای رندر کردن سیگنال‌ها
+        function renderSignals() {
+            const container = document.getElementById('signalsContainer');
+            container.innerHTML = '';
+            
+            signalsData.forEach(signal => {
+                let statusClass, statusIcon;
+                switch(signal.status) {
+                    case 'active':
+                        statusClass = 'status-active';
+                        statusIcon = '<i class="fas fa-spinner"></i>';
+                        break;
+                    case 'hit':
+                        statusClass = 'status-hit';
+                        statusIcon = '<i class="fas fa-bullseye"></i>';
+                        break;
+                    case 'closed':
+                        statusClass = 'status-closed';
+                        statusIcon = '<i class="fas fa-check-circle"></i>';
+                        break;
+                }
+                
+                const signalHTML = `
+                <div class="signal-card">
+                    <div class="signal-header">
+                        <div class="signal-type ${signal.type}">
+                            <i class="fas ${signal.type === 'vip' ? 'fa-crown' : 'fa-unlock'}"></i>
+                            ${signal.type === 'vip' ? 'VIP' : 'رایگان'}
+                        </div>
+                        <div class="signal-title">${signal.symbol}</div>
+                        <div class="signal-time">
+                            <i class="far fa-clock"></i>
+                            منتشر شده: ${signal.time}
+                        </div>
+                    </div>
+                    
+                    <div class="signal-content">
+                        <div class="signal-row">
+                            <div class="signal-label">
+                                <i class="fas fa-arrow-trend-up"></i>
+                                جهت بازار
+                            </div>
+                            <div class="signal-value" style="color: ${signal.direction === 'buy' ? 'var(--success)' : 'var(--danger)'};">${signal.direction === 'buy' ? 'صعودی' : 'نزولی'}</div>
+                        </div>
+                        
+                        <div class="signal-row">
+                            <div class="signal-label">
+                                <i class="fas fa-bullseye"></i>
+                                نقطه ورود
+                            </div>
+                            <div class="signal-value">$${signal.entry}</div>
+                        </div>
+                        
+                        <div class="signal-row">
+                            <div class="signal-label">
+                                <i class="fas fa-flag"></i>
+                                حد ضرر
+                            </div>
+                            <div class="signal-value">$${signal.stopLoss}</div>
+                        </div>
+                        
+                        <div class="signal-row">
+                            <div class="signal-label">
+                                <i class="fas fa-trophy"></i>
+                                اهداف سود
+                            </div>
+                            <div class="signal-value">${signal.targets.join(' - ')}</div>
+                        </div>
+                        
+                        <div class="signal-row">
+                            <div class="signal-label">
+                                <i class="fas fa-hourglass-half"></i>
+                                وضعیت
+                            </div>
+                            <div class="signal-status ${statusClass}">
+                                ${statusIcon}
+                                ${signal.statusText}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="signal-actions">
+                        <button class="action-btn save-signal" data-id="${signal.id}">
+                            <i class="far fa-bookmark"></i>
+                            ذخیره
+                        </button>
+                        <button class="action-btn primary view-analysis" data-id="${signal.id}">
+                            <i class="fas fa-chart-line"></i>
+                            تحلیل تکنیکال
+                        </button>
+                    </div>
+                </div>
+                `;
+                
+                container.innerHTML += signalHTML;
+            });
+            
+            // افزودن رویداد به دکمه‌ها
+            document.querySelectorAll('.save-signal').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const signalId = btn.getAttribute('data-id');
+                    saveSignal(signalId);
+                });
+            });
+            
+            document.querySelectorAll('.view-analysis').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const signalId = btn.getAttribute('data-id');
+                    viewAnalysis(signalId);
+                });
+            });
+        }
+        
+        // تابع برای به‌روزرسانی اطلاعات کاربر
+        function updateUserInfo() {
+            // استفاده از اطلاعات کاربر تلگرام
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const user = tg.initDataUnsafe.user;
+                userData.name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+                userData.userId = `TG-${user.id}`;
+                
+                // آواتار کاربر
+                if (user.photo_url) {
+                    document.getElementById('userAvatar').innerHTML = `<img src="${user.photo_url}" alt="Avatar" style="width:80px;height:80px;border-radius:50%;">`;
+                }
+            }
+            
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userId').textContent = `شناسه کاربری: ${userData.userId}`;
+            document.getElementById('userStatus').textContent = userData.status === 'vip' ? 'اشتراک VIP' : 'کاربر رایگان';
+            document.getElementById('creditDays').textContent = `اعتبار: ${userData.subscriptionDays} روز`;
+            document.getElementById('userSubscription').textContent = userData.subscriptionType;
+            document.getElementById('remainingDays').textContent = `${userData.subscriptionDays} روز`;
+            document.getElementById('userActiveSignals').textContent = `${userData.activeSignals} سیگنال`;
+            document.getElementById('monthlyProfit').textContent = userData.monthlyProfit;
+            document.getElementById('inviteCount').textContent = userData.inviteCount;
+            document.getElementById('freeDays').textContent = userData.freeDays;
+            document.getElementById('specialReports').textContent = userData.specialReports;
+            document.getElementById('referralCode').textContent = userData.referralCode;
+        }
+        
+        // تابع برای به‌روزرسانی آمار
+        function updateStats() {
+            document.getElementById('activeSignalsCount').textContent = statsData.activeSignals;
+            document.getElementById('newSignalsCount').textContent = statsData.newSignals;
+            document.getElementById('successRate').textContent = `${statsData.successRate}%`;
+            document.getElementById('successRateChange').textContent = `${statsData.successRateChange}%`;
+            document.getElementById('avgProfit').textContent = `+${statsData.avgProfit}%`;
+            document.getElementById('profitChange').textContent = `${statsData.profitChange}%`;
+            document.getElementById('vipUsersCount').textContent = statsData.vipUsers;
+            document.getElementById('newVipCount').textContent = statsData.newVip;
+        }
+        
+        // تابع برای مدیریت تب‌ها
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // حذف کلاس active از همه تب‌ها و محتواها
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+                    
+                    // افزودن کلاس active به تب و محتوای انتخاب شده
+                    tab.classList.add('active');
+                    const tabName = tab.getAttribute('data-tab');
+                    document.getElementById(`${tabName}Content`).classList.add('active');
+                });
+            });
+        }
+        
+        // تابع برای ذخیره سیگنال
+        function saveSignal(signalId) {
+            const signal = signalsData.find(s => s.id == signalId);
+            if (signal) {
+                // ارسال درخواست به سرور
+                const data = {
+                    action: 'save_signal',
+                    signalId: signalId,
+                    userId: userData.userId
+                };
+                
+                tg.sendData(JSON.stringify(data));
+                showNotification(`سیگنال ${signal.symbol} با موفقیت ذخیره شد!`);
+            }
+        }
+        
+        // تابع برای مشاهده تحلیل تکنیکال
+        function viewAnalysis(signalId) {
+            const signal = signalsData.find(s => s.id == signalId);
+            if (signal) {
+                tg.showPopup({
+                    title: 'تحلیل تکنیکال',
+                    message: `آیا می‌خواهید تحلیل تکنیکال برای سیگنال ${signal.symbol} را مشاهده کنید؟`,
+                    buttons: [
+                        {id: 'yes', type: 'default', text: 'بله'},
+                        {id: 'no', type: 'cancel', text: 'خیر'}
+                    ]
+                }, function(btnId) {
+                    if (btnId === 'yes') {
+                        // ارسال درخواست به سرور برای دریافت تحلیل
+                        const data = {
+                            action: 'view_analysis',
+                            signalId: signalId
+                        };
+                        tg.sendData(JSON.stringify(data));
+                    }
+                });
+            }
+        }
+        
+        // تابع برای کپی لینک دعوت
+        function setupReferral() {
+            document.getElementById('copyReferralBtn').addEventListener('click', () => {
+                const referralCode = document.getElementById('referralCode').textContent;
+                navigator.clipboard.writeText(referralCode)
+                    .then(() => {
+                        showNotification('لینک دعوت با موفقیت کپی شد!');
+                    })
+                    .catch(err => {
+                        showNotification('خطا در کپی کردن لینک!', true);
+                        console.error('خطا در کپی کردن لینک:', err);
+                    });
+            });
+        }
+        
+        // تابع برای مدیریت پشتیبانی
+        function setupSupport() {
+            document.getElementById('contactSupportBtn').addEventListener('click', () => {
+                document.getElementById('ticketForm').style.display = 'block';
+            });
+            
+            document.getElementById('submitTicketBtn').addEventListener('click', () => {
+                const message = document.getElementById('ticketMessage').value;
+                if (message.trim() === '') {
+                    showNotification('لطفاً پیام خود را وارد کنید', true);
+                    return;
+                }
+                
+                // ارسال تیکت به سرور
+                const data = {
+                    action: 'submit_ticket',
+                    userId: userData.userId,
+                    message: message
+                };
+                tg.sendData(JSON.stringify(data));
+                
+                showNotification('تیکت پشتیبانی با موفقیت ارسال شد');
+                document.getElementById('ticketMessage').value = '';
+                document.getElementById('ticketForm').style.display = 'none';
+            });
+            
+            // رویداد برای کارت‌های پشتیبانی
+            document.querySelectorAll('.support-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const type = card.getAttribute('data-type');
+                    switch(type) {
+                        case 'chat':
+                            tg.openTelegramLink('https://t.me/SignalAnalystSupport');
+                            break;
+                        case 'ticket':
+                            document.getElementById('ticketForm').style.display = 'block';
+                            break;
+                        case 'channel':
+                            tg.openTelegramLink('https://t.me/SignalAnalystChannel');
+                            break;
+                        case 'guide':
+                            tg.openTelegramLink('https://signalanalyst.com/guide');
+                            break;
+                    }
+                });
+            });
+        }
+        
+        // تابع برای پرداخت VIP
+        function setupPayment() {
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            let selectedMethod = null;
+            
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // حذف انتخاب قبلی
+                    paymentOptions.forEach(o => o.classList.remove('selected'));
+                    
+                    // انتخاب گزینه جدید
+                    option.classList.add('selected');
+                    selectedMethod = option.getAttribute('data-method');
+                });
+            });
+            
+            document.getElementById('payButton').addEventListener('click', () => {
+                if (!selectedMethod) {
+                    showNotification('لطفاً یک روش پرداخت انتخاب کنید', true);
+                    return;
+                }
+                
+                // ارسال درخواست پرداخت به سرور
+                const data = {
+                    action: 'init_payment',
+                    userId: userData.userId,
+                    method: selectedMethod,
+                    amount: 50
+                };
+                
+                tg.sendData(JSON.stringify(data));
+                
+                if (selectedMethod === 'card') {
+                    tg.showAlert('پرداخت با کارت بانکی:\nشماره کارت: 6037-9971-1234-5678\nپس از پرداخت، تصویر رسید را ارسال کنید');
+                } else if (selectedMethod === 'tron') {
+                    tg.showAlert('پرداخت با TRON:\nآدرس کیف پول: TXYZ...abc\nپس از پرداخت، هش تراکنش را ارسال کنید');
+                }
+            });
+        }
+        
+        // تابع برای انیمیشن موج شیشه‌ای
+        function setupWaveAnimation() {
+            const wave = document.querySelector('.glass-wave');
+            document.addEventListener('mousemove', (e) => {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                wave.style.transform = `rotate(5deg) translate(${x * 50}px, ${y * 20}px)`;
+            });
+        }
+        
+        // تابع اصلی برای مقداردهی اولیه
+        function initApp() {
+            // تنظیمات اولیه تلگرام
+            tg.expand(); // باز کردن کامل صفحه
+            tg.enableClosingConfirmation(); // فعال‌سازی تایید بستن صفحه
+            
+            // تنظیم تم تلگرام
+            if (tg.themeParams.text_color) {
+                document.documentElement.style.setProperty('--text', tg.themeParams.text_color);
+            }
+            
+            if (tg.themeParams.bg_color) {
+                document.documentElement.style.setProperty('--primary', tg.themeParams.bg_color);
+            }
+            
+            // بارگذاری اولیه داده‌ها
+            renderSignals();
+            updateUserInfo();
+            updateStats();
+            
+            // تنظیم رویدادها
+            setupTabs();
+            setupReferral();
+            setupSupport();
+            setupPayment();
+            setupWaveAnimation();
+            
+            // تنظیم رویداد برای دریافت داده‌ها از تلگرام
+            tg.onEvent('themeChanged', function() {
+                document.documentElement.style.setProperty('--text', tg.themeParams.text_color);
+                document.documentElement.style.setProperty('--primary', tg.themeParams.bg_color);
+            });
+        }
+        
+        // اجرای تابع مقداردهی اولیه پس از بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
