@@ -3,7 +3,7 @@ uvicorn[standard]
 sqlalchemy
 python-jose
 python-dotenv
-
+python-multipart
 flask
 pyjwt
 python-dotenv
