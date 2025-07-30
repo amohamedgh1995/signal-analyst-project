@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+python-jose
+python-dotenv
+
+flask
+pyjwt
+python-dotenv
