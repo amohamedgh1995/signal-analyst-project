@@ -23,9 +23,18 @@ app = FastAPI(
 
 # افزودن سرویس فایل‌های استاتیک
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
-
+from app.routers import (
+    users as users_router,
+    admin as admin_router,
+    auth as auth_router,
+    signals as signals_router,
+    payments as payments_router,
+    support as support_router
+)
 
 # افزودن روترها
+app.include_router(auth_router.router)
+app.include_router(users_router.router)
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(admin.router)
