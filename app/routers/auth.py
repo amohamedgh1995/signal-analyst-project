@@ -5,7 +5,42 @@ from app.database import get_db
 from app.dependencies import create_access_token, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
+# قبل از router = APIRouter(...)
+from pydantic import BaseModel
 
+class TelegramLogin(BaseModel):
+    telegram_id: int
+    username: str
+    first_name: str
+    last_name: str = None
+
+# بعد از تابع login_for_access_token
+@router.post("/telegram-login", response_model=schemas.Token)
+async def telegram_login(
+    user_data: TelegramLogin,
+    db: Session = Depends(get_db)
+):
+    user = db.query(models.User).filter(
+        models.User.telegram_id == user_data.telegram_id
+    ).first()
+    
+    if not user:
+        # ایجاد کاربر جدید
+        user = models.User(
+            telegram_id=user_data.telegram_id,
+            username=user_data.username,
+            full_name=f"{user_data.first_name} {user_data.last_name or ''}",
+            status="free",
+            is_active=True
+        )
+        db.add(user)
+        db.commit()
+    
+    # ایجاد توکن دسترسی
+    access_token = create_access_token(
+        data={"sub": str(user.telegram_id)}
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 router = APIRouter(tags=["Authentication"], prefix="/auth")
 
 @router.post("/token", response_model=schemas.Token)
