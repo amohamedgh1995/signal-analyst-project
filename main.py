@@ -8,6 +8,36 @@ import traceback
 
 # ایجاد جداول دیتابیس
 models.Base.metadata.create_all(bind=engine)
+from app.database import SessionLocal
+
+def create_admin_user():
+    db = SessionLocal()
+    try:
+        admin = db.query(models.User).filter(
+            models.User.telegram_id == YOUR_TELEGRAM_ID
+        ).first()
+        
+        if not admin:
+            new_admin = models.User(
+                telegram_id=YOUR_TELEGRAM_ID,
+                username="YOUR_USERNAME",
+                full_name="Admin User",
+                status="admin",
+                is_active=True
+            )
+            db.add(new_admin)
+            db.commit()
+            print("Admin user created successfully!")
+        else:
+            admin.status = "admin"
+            db.commit()
+            print("User upgraded to admin!")
+    except Exception as e:
+        print(f"Error creating admin: {str(e)}")
+    finally:
+        db.close()
+
+create_admin_user()
 # این خطوط را در بالای فایل اضافه کنید
 import os
 from fastapi import FastAPI, Request
