@@ -8,3 +8,4 @@ flask
 pyjwt
 python-dotenv
 python-telegram-bot
+python-telegram-bot==20.3
