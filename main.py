@@ -8,7 +8,11 @@ import traceback
 
 # ایجاد جداول دیتابیس
 models.Base.metadata.create_all(bind=engine)
-
+# این خطوط را در بالای فایل اضافه کنید
+import os
+from fastapi import FastAPI, Request
+from telegram import Bot
+from telegram.ext import Dispatcher, CommandHandler
 app = FastAPI(
     title="سیگنال تحلیلگران برتر",
     description="سیستم مدیریت سیگنال‌دهی حرفه‌ای",
