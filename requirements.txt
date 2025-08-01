@@ -1,4 +1,4 @@
-fastapi
+fastapi>=0.100.0
 uvicorn[standard]
 sqlalchemy
 python-jose==3.3.0
@@ -7,10 +7,11 @@ python-multipart
 flask
 pyjwt
 python-dotenv
-python-telegram-bot==20.8
+python-telegram-bot>=20.0
 fastapi==0.110.0
-uvicorn[standard]==0.29.0
+uvicorn>=0.22.0
 python-telegram-bot==20.8
 python-jose==3.3.0
 SQLAlchemy>=2.0.30
 python-dotenv==1.0.1
+
