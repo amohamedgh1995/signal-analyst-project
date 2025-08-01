@@ -10,7 +10,7 @@ python-dotenv
 from telegram.ext import Application, CommandHandler
 fastapi==0.110.0
 uvicorn[standard]==0.29.0
-python-telegram-bot==21.1.1
+python-telegram-bot==20.8
 python-jose==3.3.0
 SQLAlchemy>=2.0.30
 python-dotenv==1.0.1
