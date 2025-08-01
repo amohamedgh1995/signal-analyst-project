@@ -1061,6 +1061,31 @@
     </div>
 
     <script>
+        // بعد از <script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.MainButton.setText('بارگذاری مجدد');
+tg.MainButton.show();
+
+// ارسال اطلاعات کاربر به بک‌اند
+if (tg.initDataUnsafe?.user) {
+    const user = tg.initDataUnsafe.user;
+    fetch('/auth/telegram-login', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            telegram_id: user.id,
+            username: user.username || `user${user.id}`,
+            first_name: user.first_name,
+            last_name: user.last_name || ''
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Login successful:', data);
+        localStorage.setItem('access_token', data.access_token);
+    });
+}
         // داده‌های نمونه برای نمایش در رابط کاربری
         const userData = {
             name: "محمد رضایی",
