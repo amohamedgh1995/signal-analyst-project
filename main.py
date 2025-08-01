@@ -142,7 +142,7 @@ async def telegram_webhook(request: Request):
     
     application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
     application.add_handler(CommandHandler("start", start))
-    
+    await application.process_update(update)
     data = await request.json()
     update = Update.de_json(data, bot)
     
