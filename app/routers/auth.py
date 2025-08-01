@@ -1,3 +1,6 @@
+router = APIRouter(tags=["Authentication"], prefix="/auth")  # این خط باید وجود داشته باشد
+
+# بقیه کدها...
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app import schemas, models
