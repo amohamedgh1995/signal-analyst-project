@@ -3,6 +3,9 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 import os
+from telegram import Bot
+from telegram.ext import Application, CommandHandler  # <-- این خط حیاتی است
+from telegram import Update
 import traceback
 
 # ابتدا تنظیمات محیطی و ایمپورت‌های پایه
