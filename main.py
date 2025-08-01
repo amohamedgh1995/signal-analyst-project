@@ -52,7 +52,48 @@ async def general_exception_handler(request: Request, exc: Exception):
             "code": "SERVER_ERROR"
         },
     )
+# خطوط جدید اضافه کنید
+import os
+from telegram import Bot, Update
+from telegram.ext import Dispatcher, CommandHandler
+from fastapi import Request
 
+# تنظیمات تلگرام
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+bot = Bot(token=TELEGRAM_BOT_TOKEN)
+
+# هندلر دستور /start
+async def start(update: Update, context):
+    await update.message.reply_text(
+        "🚀 به ربات سیگنال تحلیلگران برتر خوش آمدید!\n"
+        "برای دسترسی به اپلیکیشن از دکمه منو استفاده کنید."
+    )
+
+# تنظیم وب‌هوک هنگام استارت
+@app.on_event("startup")
+async def on_startup():
+    await bot.set_webhook(url="https://signal-analyst-project.onrender.com/webhook")
+    
+    # تنظیم منوی ربات
+    await bot.set_chat_menu_button(
+        menu_button={
+            "type": "web_app",
+            "text": "📊 Open App",
+            "web_app": {"url": "https://signal-analyst-project.onrender.com"}
+        }
+    )
+
+# هندلر وب‌هوک
+@app.post("/webhook")
+async def telegram_webhook(request: Request):
+    dp = Dispatcher(bot, None, workers=0)
+    dp.add_handler(CommandHandler("start", start))
+    
+    data = await request.json()
+    update = Update.de_json(data, bot)
+    
+    await dp.process_update(update)
+    return {"status": "ok"}
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
