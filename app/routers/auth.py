@@ -1,22 +1,22 @@
-router = APIRouter(tags=["Authentication"], prefix="/auth") 
-
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordRequestForm
+from datetime import timedelta
+from pydantic import BaseModel
+
 from app import schemas, models
 from app.database import get_db
 from app.dependencies import create_access_token, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
-from fastapi.security import OAuth2PasswordRequestForm
-from datetime import timedelta
 
-from pydantic import BaseModel
+# تعریف روتر
+router = APIRouter(tags=["Authentication"], prefix="/auth")
 
+# مدل برای لاگین تلگرام
 class TelegramLogin(BaseModel):
     telegram_id: int
     username: str
     first_name: str
     last_name: str = None
-
 
 @router.post("/telegram-login", response_model=schemas.Token)
 async def telegram_login(
@@ -38,12 +38,10 @@ async def telegram_login(
         db.add(user)
         db.commit()
     
-
     access_token = create_access_token(
         data={"sub": str(user.telegram_id)}
     )
     return {"access_token": access_token, "token_type": "bearer"}
-router = APIRouter(tags=["Authentication"], prefix="/auth")
 
 @router.post("/token", response_model=schemas.Token)
 def login_for_access_token(
@@ -61,7 +59,6 @@ def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-
     if not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -98,7 +95,6 @@ async def login_for_swagger_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-
     if not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -115,7 +111,6 @@ def register_user(
     user: schemas.UserCreate, 
     db: Session = Depends(get_db)
 ):
-
     db_user = db.query(models.User).filter(
         (models.User.telegram_id == user.telegram_id) | 
         (models.User.username == user.username)
@@ -127,14 +122,13 @@ def register_user(
             detail="Telegram ID یا نام کاربری قبلاً ثبت شده"
         )
     
-
     new_user = models.User(
         telegram_id=user.telegram_id,
         username=user.username,
         full_name=user.full_name,
         invited_by=user.invited_by,
-        status="free", 
-        is_active=True  
+        status="free",
+        is_active=True
     )
     
     db.add(new_user)
