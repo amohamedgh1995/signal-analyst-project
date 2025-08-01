@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سیگنال تحلیلگران برتر | مینی‌اپ تلگرام</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -29,7 +29,7 @@
         }
         
         body {
-           background: url('https://images.unsplash.com/photo-1620336655052-b57986f5a26a?q=80&w=2070') center/cover no-repeat;
+            background: url('https://images.unsplash.com/photo-1620336655052-b57986f5a26a?q=80&w=2070') center/cover no-repeat;
             color: var(--text);
             min-height: 100vh;
             padding: 20px;
@@ -79,8 +79,7 @@
             font-weight: 700;
             background: linear-gradient(to right, #f59e0b, #ec4899);
             background-clip: text;
--webkit-background-clip: text;
-
+            -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
@@ -1061,31 +1060,6 @@
     </div>
 
     <script>
-        // بعد از <script>
-//const tg = window.Telegram.WebApp;
-tg.expand();
-tg.MainButton.setText('بارگذاری مجدد');
-tg.MainButton.show();
-
-// ارسال اطلاعات کاربر به بک‌اند
-if (tg.initDataUnsafe?.user) {
-    const user = tg.initDataUnsafe.user;
-    fetch('/auth/telegram-login', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            telegram_id: user.id,
-            username: user.username || `user${user.id}`,
-            first_name: user.first_name,
-            last_name: user.last_name || ''
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Login successful:', data);
-        localStorage.setItem('access_token', data.access_token);
-    });
-}
         // داده‌های نمونه برای نمایش در رابط کاربری
         const userData = {
             name: "محمد رضایی",
@@ -1150,9 +1124,6 @@ if (tg.initDataUnsafe?.user) {
             vipUsers: 243,
             newVip: 12
         };
-
-        // شیء تلگرام
-        const tg = window.Telegram.WebApp;
 
         // تابع برای نمایش نوتیفیکیشن
         function showNotification(message, isError = false) {
@@ -1282,6 +1253,7 @@ if (tg.initDataUnsafe?.user) {
         // تابع برای به‌روزرسانی اطلاعات کاربر
         function updateUserInfo() {
             // استفاده از اطلاعات کاربر تلگرام
+            const tg = window.Telegram.WebApp;
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const user = tg.initDataUnsafe.user;
                 userData.name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
@@ -1319,7 +1291,7 @@ if (tg.initDataUnsafe?.user) {
             document.getElementById('newVipCount').textContent = statsData.newVip;
         }
         
-        // تابع برای مدیریت تب‌ها
+        // تابع برای مدیریت تب‌ها (اصلاح شده)
         function setupTabs() {
             const tabs = document.querySelectorAll('.tab');
             const contents = document.querySelectorAll('.tab-content');
@@ -1334,6 +1306,13 @@ if (tg.initDataUnsafe?.user) {
                     tab.classList.add('active');
                     const tabName = tab.getAttribute('data-tab');
                     document.getElementById(`${tabName}Content`).classList.add('active');
+                    
+                    // لود محتوای تاریخچه سیگنال‌ها هنگام انتخاب تب
+                    if (tabName === 'history') {
+                        setTimeout(() => {
+                            document.querySelector('#historyContent .loading').style.display = 'none';
+                        }, 1000);
+                    }
                 });
             });
         }
@@ -1349,6 +1328,7 @@ if (tg.initDataUnsafe?.user) {
                     userId: userData.userId
                 };
                 
+                const tg = window.Telegram.WebApp;
                 tg.sendData(JSON.stringify(data));
                 showNotification(`سیگنال ${signal.symbol} با موفقیت ذخیره شد!`);
             }
@@ -1358,6 +1338,7 @@ if (tg.initDataUnsafe?.user) {
         function viewAnalysis(signalId) {
             const signal = signalsData.find(s => s.id == signalId);
             if (signal) {
+                const tg = window.Telegram.WebApp;
                 tg.showPopup({
                     title: 'تحلیل تکنیکال',
                     message: `آیا می‌خواهید تحلیل تکنیکال برای سیگنال ${signal.symbol} را مشاهده کنید؟`,
@@ -1407,6 +1388,7 @@ if (tg.initDataUnsafe?.user) {
                 }
                 
                 // ارسال تیکت به سرور
+                const tg = window.Telegram.WebApp;
                 const data = {
                     action: 'submit_ticket',
                     userId: userData.userId,
@@ -1423,6 +1405,7 @@ if (tg.initDataUnsafe?.user) {
             document.querySelectorAll('.support-card').forEach(card => {
                 card.addEventListener('click', () => {
                     const type = card.getAttribute('data-type');
+                    const tg = window.Telegram.WebApp;
                     switch(type) {
                         case 'chat':
                             tg.openTelegramLink('https://t.me/SignalAnalystSupport');
@@ -1463,6 +1446,7 @@ if (tg.initDataUnsafe?.user) {
                     return;
                 }
                 
+                const tg = window.Telegram.WebApp;
                 // ارسال درخواست پرداخت به سرور
                 const data = {
                     action: 'init_payment',
